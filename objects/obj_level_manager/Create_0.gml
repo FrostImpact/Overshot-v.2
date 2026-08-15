@@ -1,0 +1,1 @@
+level_config_init();

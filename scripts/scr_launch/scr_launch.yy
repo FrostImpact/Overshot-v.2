@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_launch",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_launch",
+  "parent":{
+    "name":"physics",
+    "path":"folders/player/scripts/physics.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

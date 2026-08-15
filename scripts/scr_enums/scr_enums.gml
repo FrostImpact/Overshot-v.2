@@ -1,0 +1,34 @@
+enum GameSpeedMode {
+    NORMAL,
+    AIMING,
+    BOSS_SLOW,
+    PAUSED
+}
+
+enum LaserState {
+    TRACKING,
+    LOCKED,
+    FIRING
+}
+
+enum TransitionState {
+    NONE,
+    SLIDING
+}
+
+enum SunderState {
+    IDLE,
+    PRE_DASH,
+    CLEAVE_WINDUP,
+    CLEAVE_ATTACK,
+    QUICK_SLASHES,
+    RAZORWIND_SPIN,
+    RAZORWIND_SLASH,
+    RICOCHET_ASSAULT,
+    RICOCHET_STRIKE,
+    UNRELENTING_CHARGE,
+    UNRELENTING_DASH,
+    BLADE_TOSS,
+	PHASE_TRANSITION
+}
+

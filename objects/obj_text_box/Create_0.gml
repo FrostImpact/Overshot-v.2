@@ -1,0 +1,9 @@
+text_pages = [];
+page_index = 0;
+char_index = 0;
+text_color = c_black;
+text_speed = 0.5;
+auto_close_timer = -1;
+auto_close_duration = -1;
+margin = 16;
+icon_sprite = -1;

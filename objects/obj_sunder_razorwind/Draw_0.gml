@@ -1,0 +1,1 @@
+draw_sprite_ext(sprite_index, image_index, x, y, visual_scale_x, visual_scale_y, image_angle, has_redirected ? c_red : c_yellow, 0.9);
