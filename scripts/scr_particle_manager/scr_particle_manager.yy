@@ -6,7 +6,7 @@
   "name":"scr_particle_manager",
   "parent":{
     "name":"particles",
-    "path":"folders/player/scripts/particles.yy",
+    "path":"folders/scripts/particles.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

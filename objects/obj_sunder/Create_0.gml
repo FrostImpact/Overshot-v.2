@@ -64,4 +64,7 @@ current_move_speed = 0;
 telegraph_alpha = 0;
 telegraph_angle = 0;
 
+balls = false
+balls2 = false
+
 particle_init();

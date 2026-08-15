@@ -6,7 +6,7 @@
   "name":"scr_player_mechanics",
   "parent":{
     "name":"core",
-    "path":"folders/player/scripts/core.yy",
+    "path":"folders/scripts/core.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

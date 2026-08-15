@@ -5,11 +5,18 @@ enemy_hp_display = lerp(enemy_hp_display, enemy_hp, 0.1);
 var game_speed = game_state_get_speed();
 
 if (is_dead) {
+    textbox_say(["Death truly is...","...","...relentless."], c_maroon, true, 120, spr_sunder_icon);
+    
     visual_scale_x += 0.05 * game_speed;
     visual_scale_y += 0.05 * game_speed;
     image_alpha  -= 0.03 * game_speed;
     if (image_alpha <= 0) instance_destroy();
     exit;
+}
+
+if (!balls){
+    textbox_say(["Another one?","Lets see how long you last."], c_maroon, true, 120, spr_sunder_icon);
+    balls = true
 }
 
 event_inherited();
@@ -18,7 +25,6 @@ var _player_exists = instance_exists(obj_player);
 var _p_x = _player_exists ? obj_player.x : x;
 var _p_y = _player_exists ? obj_player.y : y;
 
-// Look at player unless performing locked orientation states
 if (_player_exists && state != SunderState.RAZORWIND_SPIN 
     && state != SunderState.UNRELENTING_DASH 
     && state != SunderState.PHASE_TRANSITION) {
@@ -26,14 +32,12 @@ if (_player_exists && state != SunderState.RAZORWIND_SPIN
     image_angle = visual_angle; 
 }
 
-// --- PHASE 2 TRANSITION TRIGGER ---
 var _hp_ratio = enemy_hp / enemy_max_hp;
 if (!is_phase_2 && _hp_ratio <= 0.50 && state != SunderState.PHASE_TRANSITION) {
     state = SunderState.PHASE_TRANSITION;
     state_timer = 0;
-    dash_timer = 0; // Cancel active dash movement
+    dash_timer = 0; 
     
-    // Destroy active blade if it's deployed
     if (instance_exists(active_blade)) {
         particle_spawn_shatter(active_blade.x, active_blade.y, 10);
         instance_destroy(active_blade);
@@ -41,7 +45,6 @@ if (!is_phase_2 && _hp_ratio <= 0.50 && state != SunderState.PHASE_TRANSITION) {
     }
 }
 
-// Cooldown updates
 if (cd_quick_slashes > 0) cd_quick_slashes -= game_speed;
 if (cd_razorwind > 0)     cd_razorwind -= game_speed;
 if (cd_ricochet > 0)      cd_ricochet -= game_speed; 
@@ -50,7 +53,6 @@ if (cd_blade_toss > 0)    cd_blade_toss -= game_speed;
 
 var _spd_mult = is_phase_2 ? 1.5 : 1.0;
 
-// Helper: Teleport to active blade
 var _try_blade_teleport = function() {
     if (instance_exists(active_blade) && active_blade.is_active) {
         if (random(1) < 0.45) { 
@@ -58,7 +60,6 @@ var _try_blade_teleport = function() {
             x = active_blade.x;
             y = active_blade.y;
             
-            // Pop on arrival
             particle_spawn_ring_wave(x, y);
             particle_spawn_spark(x, y, 20);
             
@@ -73,7 +74,6 @@ var _try_blade_teleport = function() {
 };
 
 switch (state) {
-
     case SunderState.IDLE:
         state_timer += game_speed;
         var _delay = is_phase_2 ? 22 : idle_delay;
@@ -270,7 +270,6 @@ switch (state) {
         var _vy = lengthdir_y(ricochet_speed * game_speed, ricochet_dir);
         var _bounced = false;
 
-        // Resolve X bounce
         if (place_meeting(x + _vx, y, obj_wall)) {
             _vx = -_vx;
             _bounced = true;
@@ -278,7 +277,6 @@ switch (state) {
             x += _vx;
         }
 
-        // Resolve Y bounce
         if (place_meeting(x, y + _vy, obj_wall)) {
             _vy = -_vy;
             _bounced = true;
@@ -307,21 +305,22 @@ switch (state) {
         break;
 
     case SunderState.RICOCHET_STRIKE:
+        if (state_timer == 0) {
+            telegraph_angle = point_direction(x, y, _p_x, _p_y); 
+        }
+        
         state_timer += game_speed;
         
         if (state_timer < 15) {
-            telegraph_angle = point_direction(x, y, _p_x, _p_y);
             visual_angle = telegraph_angle;
             particle_spawn_spark(x, y, 2); 
         } else if (state_timer == 15) {
             dash_dir = telegraph_angle;
             dash_speed = 40 * _spd_mult; 
         } else if (state_timer > 15 && state_timer < 25) {
-            var _nx = x + lengthdir_x(dash_speed * game_speed, dash_dir);
-            var _ny = y + lengthdir_y(dash_speed * game_speed, dash_dir);
-            
-            if (!place_meeting(_nx, y, obj_wall)) x = _nx;
-            if (!place_meeting(x, _ny, obj_wall)) y = _ny;
+            // Replaced collision-halting logic with straight coordinate addition to dash through walls
+            x += lengthdir_x(dash_speed * game_speed, dash_dir);
+            y += lengthdir_y(dash_speed * game_speed, dash_dir);
             
             particle_spawn_dash_trail(x, y);
             
@@ -357,16 +356,17 @@ switch (state) {
         }
         
         state_timer += game_speed;
-        unrelenting_line_alpha = min(1, state_timer / 15);
+        unrelenting_line_alpha = min(1, state_timer / 12); 
         
-        var _shake = (state_timer / 25) * 4; 
+        // Accelerated from 25 to 12 frames
+        var _shake = (state_timer / 12) * 4; 
         x += random_range(-_shake, _shake);
         y += random_range(-_shake, _shake);
-        image_blend = merge_color(c_white, c_red, state_timer / 25); 
+        image_blend = merge_color(c_white, c_red, state_timer / 12); 
         
         particle_spawn_spark(x + random_range(-15, 15), y + random_range(-15, 15), 1);
         
-        if (state_timer >= 25) {
+        if (state_timer >= 12) {
             state = SunderState.UNRELENTING_DASH;
             state_timer = 0;
             unrelenting_line_alpha = 0;
@@ -434,18 +434,20 @@ switch (state) {
         break;
 
     case SunderState.PHASE_TRANSITION:
+    
+        if (!balls2){
+            textbox_say(["You think I'm done with you?","I will never kneel to a puppet."], c_maroon, true, 120, spr_sunder_icon);
+        }
+    
         state_timer += game_speed;
-        var _trans_max = 60; // 1-second animation duration
+        var _trans_max = 60; 
         
-        // Trembling vibration
         var _shake = (state_timer / _trans_max) * 6; 
         x += random_range(-_shake, _shake);
         y += random_range(-_shake, _shake);
         
-        // Flash warning blend
         image_blend = merge_color(c_white, c_orange, state_timer / _trans_max);
         
-        // Geometric pull-in effect
         if (state_timer % 4 == 0) {
             particle_spawn_spark(x + random_range(-50, 50), y + random_range(-50, 50), 1);
         }
@@ -456,7 +458,6 @@ switch (state) {
             state_timer = 0;
             image_blend = c_white;
             
-            // Phase 2 detonation burst
             squash_timer = squash_duration;
             particle_spawn_ring_wave(x, y);
             particle_spawn_shatter(x, y, 35);
@@ -465,7 +466,6 @@ switch (state) {
         break;
 }
 
-// Speed ratio calculation for squash/stretch scaling
 current_move_speed = 0;
 if (state == SunderState.PRE_DASH && dash_timer > 0) current_move_speed = dash_speed;
 else if (state == SunderState.QUICK_SLASHES && quick_slash_phase == 1) current_move_speed = dash_speed;

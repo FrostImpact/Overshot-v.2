@@ -6,7 +6,7 @@
   "name":"scr_resolve",
   "parent":{
     "name":"physics",
-    "path":"folders/player/scripts/physics.yy",
+    "path":"folders/scripts/physics.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

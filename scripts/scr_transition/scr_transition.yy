@@ -6,7 +6,7 @@
   "name":"scr_transition",
   "parent":{
     "name":"ui",
-    "path":"folders/player/scripts/ui.yy",
+    "path":"folders/scripts/ui.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -6,7 +6,7 @@
   "name":"scr_debug_overlay",
   "parent":{
     "name":"debug",
-    "path":"folders/player/scripts/debug.yy",
+    "path":"folders/scripts/debug.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

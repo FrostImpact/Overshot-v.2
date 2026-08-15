@@ -6,7 +6,7 @@
   "name":"scr_game_state",
   "parent":{
     "name":"core",
-    "path":"folders/player/scripts/core.yy",
+    "path":"folders/scripts/core.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

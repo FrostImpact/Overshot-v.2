@@ -6,7 +6,7 @@
   "name":"scr_player_death",
   "parent":{
     "name":"misc",
-    "path":"folders/player/scripts/misc.yy",
+    "path":"folders/scripts/misc.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -2,7 +2,8 @@ function level_config_init() {
     global.LEVEL_TABLE = [
 		{ id: 0, room: Tutorial, name: "Tutorial", time_limit: 120, clear_target:1 },
         { id: 1, room: Level1, name: "Level 1", time_limit: 120, clear_target: 1 },
-        { id: 2, room: Level2, name: "Level 2", time_limit: 70,  clear_target: 2 }
+        { id: 2, room: Level2, name: "Level 2", time_limit: 70,  clear_target: 2 },
+		{ id: 10, room: Boss1, name: "Boss - Sunder", time_limit: 999, clear_target: 1}
     ];
     
     global.clear = 0;
