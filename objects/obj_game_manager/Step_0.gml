@@ -1,3 +1,6 @@
+if room = rm_level_select{ exit}
+
+
 if (keyboard_check_pressed(vk_escape)) {
    
     if (variable_global_exists("level_completed") && global.level_completed) {
